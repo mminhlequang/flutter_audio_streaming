@@ -18,6 +18,5 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    expect(await FlutterAudioStreaming.platformVersion, '42');
   });
 }
