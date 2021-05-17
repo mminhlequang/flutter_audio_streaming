@@ -6,10 +6,16 @@ PODS:
   - HaishinKit (1.1.5):
     - Logboard (~> 2.2.1)
   - Logboard (2.2.2)
+  - path_provider (0.0.1):
+    - Flutter
+  - wakelock (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_audio_streaming (from `.symlinks/plugins/flutter_audio_streaming/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - wakelock (from `.symlinks/plugins/wakelock/ios`)
 
 SPEC REPOS:
   trunk:
@@ -21,12 +27,18 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_audio_streaming:
     :path: ".symlinks/plugins/flutter_audio_streaming/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
+  wakelock:
+    :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_audio_streaming: 28445209adc7f0d9a1e38e42117452161bce53cd
   HaishinKit: 5cf385a823dee6b299404877edf418974422bf9f
   Logboard: 0ab6bbd984ed032b3f0b615cef06779a73445c80
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 
 PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
 
