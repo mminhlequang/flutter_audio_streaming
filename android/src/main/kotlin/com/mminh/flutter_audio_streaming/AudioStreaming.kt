@@ -76,6 +76,7 @@ class AudioStreaming(
     fun stopStreaming(result: MethodChannel.Result) {
         try {
             rtmpAudio.stopStream()
+            result.success(null)
         } catch (e: IllegalStateException) {
             result.error("StopAudioStreamingFailed", e.message, null)
         }

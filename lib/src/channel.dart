@@ -34,7 +34,9 @@ class StreamingChannel extends StreamingBaseChannel {
   start(String url) async {
     await _channel.invokeMapMethod<String, dynamic>(
       'startStreaming',
-      <String, dynamic>{},
+      <String, dynamic>{
+        "url" : url
+      },
     );
   }
 
