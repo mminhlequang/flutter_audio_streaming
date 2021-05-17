@@ -3,15 +3,74 @@ import 'package:flutter/services.dart';
 final MethodChannel _channel =
     const MethodChannel('plugins.flutter.io/flutter_audio_streaming');
 
-class StreamingChannel extends StreamingBaseChannel {
+class RecordingChannel extends RecordingBaseChannel {
   @override
-  initialize() async {
-    await _channel.invokeMapMethod<String, dynamic>('initializeStreaming');
+  initialize(String path) async {
+    return _channel.invokeMapMethod<String, dynamic>(
+      'initializeRecording',
+      <String, dynamic>{'path': path},
+    );
   }
 
   @override
   getStatistics() async {
-    await _channel.invokeMapMethod<String, dynamic>(
+    return _channel.invokeMapMethod<String, dynamic>('getStatistics');
+  }
+
+  @override
+  prepare(
+      {int bitrate,
+      int sampleRate,
+      bool isStereo,
+      bool echoCanceler,
+      noiseSuppressor}) async {
+    return _channel.invokeMapMethod<String, dynamic>(
+      'prepare',
+      <String, dynamic>{},
+    );
+  }
+
+  @override
+  start() async {
+    return await _channel.invokeMapMethod<String, dynamic>('startRecording');
+  }
+
+  @override
+  pause() async {
+    return _channel.invokeMapMethod<String, dynamic>('pauseRecording');
+  }
+
+  @override
+  resume() async {
+    return _channel.invokeMapMethod<String, dynamic>('resumeRecording');
+  }
+
+  @override
+  stop() async {
+    return _channel.invokeMapMethod<String, dynamic>(
+      'stopRecording',
+      <String, dynamic>{},
+    );
+  }
+
+  @override
+  dispose() async {
+    return _channel.invokeMapMethod<String, dynamic>(
+      'disposeRecording',
+      <String, dynamic>{},
+    );
+  }
+}
+
+class StreamingChannel extends StreamingBaseChannel {
+  @override
+  initialize() async {
+    return _channel.invokeMapMethod<String, dynamic>('initializeStreaming');
+  }
+
+  @override
+  getStatistics() async {
+    return _channel.invokeMapMethod<String, dynamic>(
       'getStatistics',
       <String, dynamic>{},
     );
@@ -24,7 +83,7 @@ class StreamingChannel extends StreamingBaseChannel {
       bool isStereo,
       bool echoCanceler,
       noiseSuppressor}) async {
-    await _channel.invokeMapMethod<String, dynamic>(
+    return _channel.invokeMapMethod<String, dynamic>(
       'prepare',
       <String, dynamic>{},
     );
@@ -32,17 +91,15 @@ class StreamingChannel extends StreamingBaseChannel {
 
   @override
   start(String url) async {
-    await _channel.invokeMapMethod<String, dynamic>(
+    return _channel.invokeMapMethod<String, dynamic>(
       'startStreaming',
-      <String, dynamic>{
-        "url" : url
-      },
+      <String, dynamic>{"url": url},
     );
   }
 
   @override
   stopStreaming() async {
-    await _channel.invokeMapMethod<String, dynamic>(
+    return _channel.invokeMapMethod<String, dynamic>(
       'stopStreaming',
       <String, dynamic>{},
     );
@@ -50,7 +107,7 @@ class StreamingChannel extends StreamingBaseChannel {
 
   @override
   dispose() async {
-    await _channel.invokeMapMethod<String, dynamic>(
+    return _channel.invokeMapMethod<String, dynamic>(
       'disposeStreaming',
       <String, dynamic>{},
     );
@@ -68,11 +125,15 @@ abstract class StreamingBaseChannel extends _BaseChannel {
 }
 
 abstract class RecordingBaseChannel extends _BaseChannel {
-  initialize();
+  initialize(String path);
 
-  start(String url);
+  start();
 
-  stopStreaming();
+  pause();
+
+  resume();
+
+  stop();
 
   dispose();
 }

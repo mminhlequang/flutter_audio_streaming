@@ -7,7 +7,7 @@ import io.flutter.plugin.common.EventChannel.EventSink
 import java.util.*
 
 
-class DartMessenger(messenger: BinaryMessenger) {
+class DartMessenger(messenger: BinaryMessenger, id : String) {
     private var eventSink: EventSink? = null
 
     enum class EventType {
@@ -28,7 +28,7 @@ class DartMessenger(messenger: BinaryMessenger) {
     }
 
     init {
-        EventChannel(messenger, "plugins.flutter.io/flutter_audio_streaming/streaming_event")
+        EventChannel(messenger, "plugins.flutter.io/flutter_audio_streaming/$id")
                 .setStreamHandler(
                         object : EventChannel.StreamHandler {
                             override fun onListen(arguments: Any?, sink: EventSink) {

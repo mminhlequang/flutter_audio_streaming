@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'streaming.dart';
 
-
 Future<void> main() async {
   runApp(App());
 }

@@ -16,7 +16,10 @@ class MethodCallHandlerImpl(
 
     private val methodChannel: MethodChannel =
         MethodChannel(messenger, "plugins.flutter.io/flutter_audio_streaming")
-    private var dartMicroMessenger: DartMessenger? = null
+    private var streamingMessenger: DartMessenger? = null
+//    private var recordingMessenger: DartMessenger? = null
+    private var audioStreaming: AudioStreaming? = null
+//    private var audioRecording: AudioRecording? = null
 
     init {
         methodChannel.setMethodCallHandler(this)
@@ -28,7 +31,7 @@ class MethodCallHandlerImpl(
 
             "prepare" -> {
                 Log.i("AudioStreaming", "prepareStreaming")
-                audioController().prepare(
+                audioStreaming?.prepare(
                     call.argument("bitrate"),
                     call.argument("sampleRate"),
                     call.argument("isStereo"),
@@ -39,7 +42,7 @@ class MethodCallHandlerImpl(
             }
             "getStatistics" -> {
                 Log.i("AudioStreaming", "getStreamStatisticsAudio")
-                audioController().getStatistics(result)
+                audioStreaming?.getStatistics(result)
             }
 
             //Audio streaming
@@ -51,7 +54,8 @@ class MethodCallHandlerImpl(
                     object : HandlerPermissions.ResultCallback {
                         override fun onResult(errorCode: String?, errorDescription: String?) {
                             if (errorCode == null) {
-                                dartMicroMessenger = DartMessenger(messenger)
+                                streamingMessenger = DartMessenger(messenger, "streaming_event")
+                                audioStreaming = AudioStreaming(activity, streamingMessenger)
                                 result.success(null)
 
                             } else {
@@ -62,17 +66,63 @@ class MethodCallHandlerImpl(
             }
             "startStreaming" -> {
                 Log.i("AudioStreaming", "startAudioStreaming")
-                audioController().startStreaming(call.argument("url"), result)
+                audioStreaming?.startStreaming(call.argument("url"), result)
             }
             "stopStreaming" -> {
                 Log.i("AudioStreaming", "stopRecordingOrStreamingAudio")
-                audioController().stopStreaming(result)
+                audioStreaming?.stopStreaming(result)
             }
             "disposeStreaming" -> {
                 Log.i("AudioStreaming", "disposeAudio")
                 // Native camera view handles the view lifecircle by themselves
                 result.success(null)
             }
+
+            //Audio recording
+//            "initializeRecording" -> {
+//                Log.i("AudioStreaming", "initializeAudio")
+//                Log.i("AudioStreaming", call.argument("path") ?: "")
+//                permissions.requestPermissions(
+//                    activity,
+//                    permissionsRegistry,
+//                    object : HandlerPermissions.ResultCallback {
+//                        override fun onResult(errorCode: String?, errorDescription: String?) {
+//                            if (errorCode == null) {
+//                                recordingMessenger = DartMessenger(messenger, "recording_event")
+//                                audioRecording = AudioRecording(activity, recordingMessenger)
+//                                audioRecording?.init(call.argument("path"))
+//                                result.success(null)
+//                            } else {
+//                                result.error(errorCode, errorDescription, null)
+//                            }
+//                        }
+//                    })
+//            }
+//            "startRecording" -> {
+//                Log.i("AudioStreaming", "startAudioStreaming")
+//                audioRecording?.start(result)
+//            }
+//            "pauseRecording" -> {
+//                Log.i("AudioStreaming", "pauseRecording")
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                    audioRecording?.pause(result)
+//                }
+//            }
+//            "resumeRecording" -> {
+//                Log.i("AudioStreaming", "resumeRecording")
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                    audioRecording?.resume(result)
+//                }
+//            }
+//            "stopRecording" -> {
+//                Log.i("AudioStreaming", "stopRecordingOrStreamingAudio")
+//                audioRecording?.stop(result)
+//            }
+//            "disposeRecording" -> {
+//                Log.i("AudioStreaming", "disposeAudio")
+//                // Native camera view handles the view lifecircle by themselves
+//                result.success(null)
+//            }
             else -> result.notImplemented()
         }
     }
@@ -80,6 +130,4 @@ class MethodCallHandlerImpl(
     fun stopListening() {
         methodChannel.setMethodCallHandler(null)
     }
-
-    private fun audioController(): AudioStreaming = AudioStreaming(activity, dartMicroMessenger)
 }
