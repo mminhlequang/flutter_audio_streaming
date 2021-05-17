@@ -15,7 +15,7 @@ and for iOS I use
 
 ## Installation
 
-First, add `camera` as a [dependency in your pubspec.yaml file](https://flutter.io/using-packages/).
+First, add `flutter_audio_streaming` as a [dependency in your pubspec.yaml file](https://flutter.io/using-packages/).
 
 ### iOS
 
@@ -32,14 +32,10 @@ Or in text format add the key:
     <key>NSAllowsArbitraryLoads</key>
     <true/>
 </dict>
-<key>NSPhotoLibraryUsageDescription</key>
-<string></string>
 <key>UIBackgroundModes</key>
 <array>
     <string>processing</string>
 </array>
-<key>NSCameraUsageDescription</key>
-<string>App requires access to the camera for live streaming feature.</string>
 <key>NSMicrophoneUsageDescription</key>
 <string>App requires access to the microphone for live streaming feature.</string>
 ```
