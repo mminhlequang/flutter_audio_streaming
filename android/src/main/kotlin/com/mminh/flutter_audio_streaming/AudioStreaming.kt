@@ -73,6 +73,24 @@ class AudioStreaming(
         }
     }
 
+    fun muteStreaming(result: MethodChannel.Result) {
+        try {
+            rtmpAudio.disableAudio()
+            result.success(null)
+        } catch (e: IllegalStateException) {
+            result.error("MuteAudioStreamingFailed", e.message, null)
+        }
+    }
+
+    fun unMuteStreaming(result: MethodChannel.Result) {
+        try {
+            rtmpAudio.enableAudio()
+            result.success(null)
+        } catch (e: IllegalStateException) {
+            result.error("UnMuteAudioStreamingFailed", e.message, null)
+        }
+    }
+
     fun stopStreaming(result: MethodChannel.Result) {
         try {
             rtmpAudio.stopStream()

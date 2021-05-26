@@ -69,8 +69,16 @@ class MethodCallHandlerImpl(
                 audioStreaming?.startStreaming(call.argument("url"), result)
             }
             "stopStreaming" -> {
-                Log.i("AudioStreaming", "stopRecordingOrStreamingAudio")
+                Log.i("AudioStreaming", "stopStreaming")
                 audioStreaming?.stopStreaming(result)
+            }
+            "muteStreaming" -> {
+                Log.i("AudioStreaming", "muteStreaming")
+                audioStreaming?.muteStreaming(result)
+            }
+            "unMuteStreaming" -> {
+                Log.i("AudioStreaming", "unMuteStreaming")
+                audioStreaming?.unMuteStreaming(result)
             }
             "disposeStreaming" -> {
                 Log.i("AudioStreaming", "disposeAudio")

@@ -112,12 +112,32 @@ class StreamingChannel extends StreamingBaseChannel {
       <String, dynamic>{},
     );
   }
+
+  @override
+  mute() async {
+    return _channel.invokeMapMethod<String, dynamic>(
+      'muteStreaming',
+      <String, dynamic>{},
+    );
+  }
+
+  @override
+  unMute() async {
+    return _channel.invokeMapMethod<String, dynamic>(
+      'unMuteStreaming',
+      <String, dynamic>{},
+    );
+  }
 }
 
 abstract class StreamingBaseChannel extends _BaseChannel {
   initialize();
 
   start(String url);
+
+  mute();
+
+  unMute();
 
   stopStreaming();
 

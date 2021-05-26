@@ -6,6 +6,7 @@ class AudioValue {
     this.isInitialized,
     this.isStreaming,
     this.errorDescription,
+    this.isMuted,
     this.event,
   });
 
@@ -13,6 +14,7 @@ class AudioValue {
       : this(
           isInitialized: false,
           isStreaming: false,
+          isMuted: false,
         );
 
   /// True after [StreamingController.initialize] has completed successfully.
@@ -20,6 +22,9 @@ class AudioValue {
 
   /// True when the streaming is true
   final bool isStreaming;
+
+  /// True when the micro muted is true
+  final bool isMuted;
 
   /// Raw event info
   final dynamic event;
@@ -32,14 +37,15 @@ class AudioValue {
     bool isInitialized,
     bool isStreaming,
     String errorDescription,
+    bool isMuted,
     dynamic event,
   }) {
     return AudioValue(
-      isInitialized: isInitialized ?? this.isInitialized,
-      isStreaming: isStreaming ?? this.isStreaming,
-      errorDescription: errorDescription ?? this.errorDescription,
-      event: event ?? this.event,
-    );
+        isInitialized: isInitialized ?? this.isInitialized,
+        isStreaming: isStreaming ?? this.isStreaming,
+        errorDescription: errorDescription ?? this.errorDescription,
+        event: event ?? this.event,
+        isMuted: isMuted ?? this.isMuted);
   }
 
   @override
@@ -48,6 +54,7 @@ class AudioValue {
         'isStreaming: $isStreaming, '
         'event: $event, '
         'isInitialized: $isInitialized, '
+        'isMuted: $isMuted, '
         'errorDescription: $errorDescription)';
   }
 }

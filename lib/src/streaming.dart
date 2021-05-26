@@ -104,6 +104,50 @@ class StreamingController extends ValueNotifier<AudioValue> {
     }
   }
 
+  /// Mute streaming.
+  Future<void> mute() async {
+    if (!value.isInitialized || _isDisposed) {
+      throw AudioStreamingException(
+        'Uninitialized CameraController',
+        'stopVideoStreaming was called on uninitialized CameraController',
+      );
+    }
+    if (!value.isStreaming) {
+      throw AudioStreamingException(
+        'No video is recording',
+        'stopVideoStreaming was called when no video is streaming.',
+      );
+    }
+    try {
+      value = value.copyWith(isMuted: true);
+      await channel.mute();
+    } on PlatformException catch (e) {
+      throw AudioStreamingException(e.code, e.message);
+    }
+  }
+
+  /// Stop streaming.
+  Future<void> unMute() async {
+    if (!value.isInitialized || _isDisposed) {
+      throw AudioStreamingException(
+        'Uninitialized CameraController',
+        'stopVideoStreaming was called on uninitialized CameraController',
+      );
+    }
+    if (!value.isStreaming) {
+      throw AudioStreamingException(
+        'No video is recording',
+        'stopVideoStreaming was called when no video is streaming.',
+      );
+    }
+    try {
+      value = value.copyWith(isMuted: false);
+      await channel.unMute();
+    } on PlatformException catch (e) {
+      throw AudioStreamingException(e.code, e.message);
+    }
+  }
+
   /// Stop streaming.
   Future<void> stop() async {
     if (!value.isInitialized || _isDisposed) {
