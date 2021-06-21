@@ -19,8 +19,8 @@ class StreamingController extends ValueNotifier<AudioValue> {
   final StreamingBaseChannel channel = StreamingChannel();
 
   bool _isDisposed = false;
-  StreamSubscription<dynamic> _eventSubscription;
-  Completer<void> _creatingCompleter;
+  StreamSubscription<dynamic>? _eventSubscription;
+  Completer<void>? _creatingCompleter;
 
   Future<void> initialize() async {
     if (_isDisposed) {
@@ -39,8 +39,8 @@ class StreamingController extends ValueNotifier<AudioValue> {
             'plugins.flutter.io/flutter_audio_streaming/streaming_event')
         .receiveBroadcastStream()
         .listen(_listener);
-    _creatingCompleter.complete();
-    return _creatingCompleter.future;
+    _creatingCompleter!.complete();
+    return _creatingCompleter!.future;
   }
 
   Future<void> prepare() async {
@@ -56,7 +56,7 @@ class StreamingController extends ValueNotifier<AudioValue> {
     // Android: Event {eventType: rtmp_retry, errorDescription: BadName received}
     // iOS: Event {event: rtmp_retry, errorDescription: connection failed rtmpStatus}
     final String eventType =
-        map['eventType'] as String ?? map['event'] as String;
+        map['eventType'] as String? ?? map['event'] as String;
     final String errorDescription = map['errorDescription'];
     final Map<String, dynamic> uniEvent = <String, dynamic>{
       'eventType': eventType,
@@ -83,13 +83,13 @@ class StreamingController extends ValueNotifier<AudioValue> {
   }
 
   Future<void> start(String url, {bool noiseSuppressor = true}) async {
-    if (!value.isInitialized || _isDisposed) {
+    if (!value.isInitialized! || _isDisposed) {
       throw AudioStreamingException(
         'Uninitialized AudioController',
         'startAudioStreaming was called on uninitialized AudioController',
       );
     }
-    if (value.isStreaming) {
+    if (value.isStreaming!) {
       throw AudioStreamingException(
         'A audio streaming is already started.',
         'startAudioStreaming was called when a recording is already started.',
@@ -106,13 +106,13 @@ class StreamingController extends ValueNotifier<AudioValue> {
 
   /// Mute streaming.
   Future<void> mute() async {
-    if (!value.isInitialized || _isDisposed) {
+    if (!value.isInitialized! || _isDisposed) {
       throw AudioStreamingException(
         'Uninitialized CameraController',
         'stopVideoStreaming was called on uninitialized CameraController',
       );
     }
-    if (!value.isStreaming) {
+    if (!value.isStreaming!) {
       throw AudioStreamingException(
         'No video is recording',
         'stopVideoStreaming was called when no video is streaming.',
@@ -128,13 +128,13 @@ class StreamingController extends ValueNotifier<AudioValue> {
 
   /// Stop streaming.
   Future<void> unMute() async {
-    if (!value.isInitialized || _isDisposed) {
+    if (!value.isInitialized! || _isDisposed) {
       throw AudioStreamingException(
         'Uninitialized CameraController',
         'stopVideoStreaming was called on uninitialized CameraController',
       );
     }
-    if (!value.isStreaming) {
+    if (!value.isStreaming!) {
       throw AudioStreamingException(
         'No video is recording',
         'stopVideoStreaming was called when no video is streaming.',
@@ -150,13 +150,13 @@ class StreamingController extends ValueNotifier<AudioValue> {
 
   /// Stop streaming.
   Future<void> stop() async {
-    if (!value.isInitialized || _isDisposed) {
+    if (!value.isInitialized! || _isDisposed) {
       throw AudioStreamingException(
         'Uninitialized CameraController',
         'stopVideoStreaming was called on uninitialized CameraController',
       );
     }
-    if (!value.isStreaming) {
+    if (!value.isStreaming!) {
       throw AudioStreamingException(
         'No video is recording',
         'stopVideoStreaming was called when no video is streaming.',
@@ -179,7 +179,7 @@ class StreamingController extends ValueNotifier<AudioValue> {
     _isDisposed = true;
     super.dispose();
     if (_creatingCompleter != null) {
-      await _creatingCompleter.future;
+      await _creatingCompleter!.future;
       await channel.dispose();
       await _eventSubscription?.cancel();
     }

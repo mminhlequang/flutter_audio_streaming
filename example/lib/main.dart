@@ -7,8 +7,6 @@ Future<void> main() async {
 }
 
 class App extends StatelessWidget {
-  const App({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,8 +17,6 @@ class App extends StatelessWidget {
 }
 
 class Home extends StatelessWidget {
-  const Home({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,19 +25,20 @@ class Home extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           ElevatedButton(
+              onPressed: () {},
               child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.multitrack_audio_outlined),
-              const SizedBox(
-                width: 4,
-              ),
-              Text(
-                "Recording",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              )
-            ],
-          )),
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.multitrack_audio_outlined),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    "Recording",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  )
+                ],
+              )),
           const SizedBox(
             height: 24,
           ),

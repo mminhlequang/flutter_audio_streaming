@@ -19,14 +19,20 @@ class RecordingChannel extends RecordingBaseChannel {
 
   @override
   prepare(
-      {int bitrate,
-      int sampleRate,
-      bool isStereo,
-      bool echoCanceler,
-      noiseSuppressor}) async {
+      {int? bitrate,
+      int? sampleRate,
+      bool? isStereo,
+      bool? echoCanceler,
+      bool? noiseSuppressor}) async {
     return _channel.invokeMapMethod<String, dynamic>(
       'prepare',
-      <String, dynamic>{},
+      <String, dynamic>{
+        'bitrate': bitrate,
+        'sampleRate': sampleRate,
+        'isStereo': isStereo,
+        'echoCanceler': echoCanceler,
+        'noiseSuppressor': noiseSuppressor
+      },
     );
   }
 
@@ -78,14 +84,20 @@ class StreamingChannel extends StreamingBaseChannel {
 
   @override
   prepare(
-      {int bitrate,
-      int sampleRate,
-      bool isStereo,
-      bool echoCanceler,
-      noiseSuppressor}) async {
+      {int? bitrate,
+      int? sampleRate,
+      bool? isStereo,
+      bool? echoCanceler,
+      bool? noiseSuppressor}) async {
     return _channel.invokeMapMethod<String, dynamic>(
       'prepare',
-      <String, dynamic>{},
+      <String, dynamic>{
+        'bitrate': bitrate,
+        'sampleRate': sampleRate,
+        'isStereo': isStereo,
+        'echoCanceler': echoCanceler,
+        'noiseSuppressor': noiseSuppressor
+      },
     );
   }
 
@@ -160,11 +172,11 @@ abstract class RecordingBaseChannel extends _BaseChannel {
 
 abstract class _BaseChannel {
   prepare(
-      {int bitrate,
-      int sampleRate,
-      bool isStereo,
-      bool echoCanceler,
-      noiseSuppressor});
+      {int? bitrate,
+      int? sampleRate,
+      bool? isStereo,
+      bool? echoCanceler,
+      bool? noiseSuppressor});
 
   getStatistics();
 }

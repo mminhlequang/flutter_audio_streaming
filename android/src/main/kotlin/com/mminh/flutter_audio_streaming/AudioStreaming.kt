@@ -21,22 +21,22 @@ class AudioStreaming(
     ): Boolean {
         prepared = true
         return rtmpAudio.prepareAudio(
-            bitrate ?: (64 * 1024),
-            sampleRate ?: 32000,
+            bitrate ?: (24 * 1024),
+            sampleRate ?: 16000,
             isStereo ?: true,
             echoCanceler ?: false,
-            (noiseSuppressor ?: false)
+            (noiseSuppressor ?: true)
         )
     }
 
     private fun prepare(): Boolean {
         prepared = true
         return rtmpAudio.prepareAudio(
-            64 * 1024,
+            24 * 1024,
             32000,
             true,
-            false,
-            false
+            true,
+            true
         )
     }
 

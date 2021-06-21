@@ -14,26 +14,26 @@ class RecordingValue {
       : this(isInitialized: false, isRecording: false, isPause: false);
 
   /// True after [StreamingController.initialize] has completed successfully.
-  final bool isInitialized;
+  final bool? isInitialized;
 
   /// True when the streaming is true
-  final bool isRecording;
+  final bool? isRecording;
 
   /// True when pause record
-  final bool isPause;
+  final bool? isPause;
 
   /// Raw event info
   final dynamic event;
 
-  final String errorDescription;
+  final String? errorDescription;
 
   bool get hasError => errorDescription != null;
 
   RecordingValue copyWith({
-    bool isInitialized,
-    bool isRecording,
-    bool isPause,
-    String errorDescription,
+    bool? isInitialized,
+    bool? isRecording,
+    bool? isPause,
+    String? errorDescription,
     dynamic event,
   }) {
     return RecordingValue(

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_audio_streaming/flutter_audio_streaming.dart';
 
 class StreamingExample extends StatefulWidget {
-  const StreamingExample({Key key}) : super(key: key);
+  const StreamingExample({Key? key}) : super(key: key);
 
   @override
   _StreamingExampleState createState() => _StreamingExampleState();
@@ -20,7 +20,7 @@ class _StreamingExampleState extends State<StreamingExample>
   TextEditingController _textFieldController = TextEditingController(
       text: "rtmp://live.bdata.link/LiveApp/732489839033615006342724");
   bool isVisible = true;
-  Timer _timer;
+  Timer? _timer;
   int seconds = 0;
   int minutes = 0;
   int hours = 0;
@@ -28,7 +28,7 @@ class _StreamingExampleState extends State<StreamingExample>
   String get textDateStream =>
       "${_min(hours)} : ${_min(minutes)} : ${_min(seconds)}";
 
-  bool get isStreaming => controller?.value?.isStreaming ?? false;
+  bool get isStreaming => controller.value.isStreaming ?? false;
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _StreamingExampleState extends State<StreamingExample>
   void dispose() async {
     _timer?.cancel();
     _timer = null;
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
     if (isStreaming) await controller.stop();
     controller.dispose();
@@ -74,7 +74,7 @@ class _StreamingExampleState extends State<StreamingExample>
         await stopStreaming();
       } else
         try {
-          final Map<dynamic, dynamic> event =
+          final Map<dynamic, dynamic>? event =
               controller.value.event as Map<dynamic, dynamic>;
           if (event != null) {
             print('Event: $event');
@@ -100,14 +100,11 @@ class _StreamingExampleState extends State<StreamingExample>
   }
 
   Future<String> startStreaming() async {
-    if (controller == null) {
-      return null;
-    }
-    if (!controller.value.isInitialized) {
+    if (!controller.value.isInitialized!) {
       showInSnackBar('Error: is not Initialized.');
-      return null;
+      return '';
     }
-    if (isStreaming) return null;
+    if (isStreaming) return '';
     // Open up a dialog for the url
     String url = await _getUrl();
     try {
@@ -133,7 +130,7 @@ class _StreamingExampleState extends State<StreamingExample>
       );
     } on AudioStreamingException catch (e) {
       _showException("startStreaming", e);
-      return null;
+      return '';
     }
     return url;
   }
@@ -172,7 +169,7 @@ class _StreamingExampleState extends State<StreamingExample>
   }
 
   Future<void> stopStreaming() async {
-    if (controller == null || !controller.value.isInitialized) {
+    if (!controller.value.isInitialized!) {
       return;
     }
     if (!isStreaming) {

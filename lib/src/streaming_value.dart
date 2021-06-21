@@ -18,26 +18,26 @@ class AudioValue {
         );
 
   /// True after [StreamingController.initialize] has completed successfully.
-  final bool isInitialized;
+  final bool? isInitialized;
 
   /// True when the streaming is true
-  final bool isStreaming;
+  final bool? isStreaming;
 
   /// True when the micro muted is true
-  final bool isMuted;
+  final bool? isMuted;
 
   /// Raw event info
   final dynamic event;
 
-  final String errorDescription;
+  final String? errorDescription;
 
   bool get hasError => errorDescription != null;
 
   AudioValue copyWith({
-    bool isInitialized,
-    bool isStreaming,
-    String errorDescription,
-    bool isMuted,
+    bool? isInitialized,
+    bool? isStreaming,
+    String? errorDescription,
+    bool? isMuted,
     dynamic event,
   }) {
     return AudioValue(

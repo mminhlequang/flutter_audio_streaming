@@ -3,7 +3,7 @@ class AudioStreamingException implements Exception {
   AudioStreamingException(this.code, this.description);
 
   String code;
-  String description;
+  String? description;
 
   @override
   String toString() => '$runtimeType($code, $description)';
