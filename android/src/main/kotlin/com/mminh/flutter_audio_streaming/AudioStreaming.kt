@@ -2,9 +2,9 @@ package com.mminh.flutter_audio_streaming
 
 import android.app.Activity
 import android.util.Log
+import com.pedro.rtmp.utils.ConnectCheckerRtmp
 import com.pedro.rtplibrary.rtmp.RtmpOnlyAudio
 import io.flutter.plugin.common.MethodChannel
-import net.ossrs.rtmp.ConnectCheckerRtmp
 import java.io.IOException
 
 class AudioStreaming(
@@ -104,18 +104,6 @@ class AudioStreaming(
         Log.d(TAG, "onConnectionSuccessRtmp")
     }
 
-    override fun onConnectionFailedRtmp(reason: String?) {
-        Log.d(TAG, "onConnectionFailedRtmp")
-        activity?.runOnUiThread { //Wait 5s and retry connect stream
-            if (rtmpAudio.reTry(5000, reason)) {
-                dartMessenger?.send(DartMessenger.EventType.RTMP_RETRY, reason)
-            } else {
-                dartMessenger?.send(DartMessenger.EventType.RTMP_STOPPED, "Failed retry")
-                rtmpAudio.stopStream()
-            }
-        }
-    }
-
     override fun onNewBitrateRtmp(bitrate: Long) {
         Log.d(TAG, "onNewBitrateRtmp: $bitrate")
     }
@@ -136,6 +124,22 @@ class AudioStreaming(
 
     override fun onAuthSuccessRtmp() {
         Log.d(TAG, "onAuthSuccessRtmp")
+    }
+
+    override fun onConnectionFailedRtmp(reason: String) {
+        Log.d(TAG, "onConnectionFailedRtmp")
+        activity?.runOnUiThread { //Wait 5s and retry connect stream
+            if (rtmpAudio.reTry(5000, reason)) {
+                dartMessenger?.send(DartMessenger.EventType.RTMP_RETRY, reason)
+            } else {
+                dartMessenger?.send(DartMessenger.EventType.RTMP_STOPPED, "Failed retry")
+                rtmpAudio.stopStream()
+            }
+        }
+    }
+
+    override fun onConnectionStartedRtmp(rtmpUrl: String) {
+        Log.d(TAG, "onConnectionStartedRtmp")
     }
 
     companion object {
