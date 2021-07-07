@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'streaming.dart';
+import 'streaming_and_record.dart';
 
 Future<void> main() async {
   runApp(App());
@@ -54,6 +55,28 @@ class Home extends StatelessWidget {
                   ),
                   Text(
                     "Streaming",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  )
+                ],
+              )),
+          const SizedBox(
+            height: 24,
+          ),
+          ElevatedButton(
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => StreamingAndRecordExample())),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.audiotrack_rounded),
+                  Icon(Icons.multitrack_audio_outlined),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    "Streaming And Record",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   )
                 ],

@@ -17,9 +17,9 @@ class MethodCallHandlerImpl(
     private val methodChannel: MethodChannel =
         MethodChannel(messenger, "plugins.flutter.io/flutter_audio_streaming")
     private var streamingMessenger: DartMessenger? = null
-//    private var recordingMessenger: DartMessenger? = null
+    private var recordingMessenger: DartMessenger? = null
     private var audioStreaming: AudioStreaming? = null
-//    private var audioRecording: AudioRecording? = null
+    private var audioRecording: AudioRecording? = null
 
     init {
         methodChannel.setMethodCallHandler(this)
@@ -87,50 +87,50 @@ class MethodCallHandlerImpl(
             }
 
             //Audio recording
-//            "initializeRecording" -> {
-//                Log.i("AudioStreaming", "initializeAudio")
-//                Log.i("AudioStreaming", call.argument("path") ?: "")
-//                permissions.requestPermissions(
-//                    activity,
-//                    permissionsRegistry,
-//                    object : HandlerPermissions.ResultCallback {
-//                        override fun onResult(errorCode: String?, errorDescription: String?) {
-//                            if (errorCode == null) {
-//                                recordingMessenger = DartMessenger(messenger, "recording_event")
-//                                audioRecording = AudioRecording(activity, recordingMessenger)
-//                                audioRecording?.init(call.argument("path"))
-//                                result.success(null)
-//                            } else {
-//                                result.error(errorCode, errorDescription, null)
-//                            }
-//                        }
-//                    })
-//            }
-//            "startRecording" -> {
-//                Log.i("AudioStreaming", "startAudioStreaming")
-//                audioRecording?.start(result)
-//            }
-//            "pauseRecording" -> {
-//                Log.i("AudioStreaming", "pauseRecording")
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                    audioRecording?.pause(result)
-//                }
-//            }
-//            "resumeRecording" -> {
-//                Log.i("AudioStreaming", "resumeRecording")
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                    audioRecording?.resume(result)
-//                }
-//            }
-//            "stopRecording" -> {
-//                Log.i("AudioStreaming", "stopRecordingOrStreamingAudio")
-//                audioRecording?.stop(result)
-//            }
-//            "disposeRecording" -> {
-//                Log.i("AudioStreaming", "disposeAudio")
-//                // Native camera view handles the view lifecircle by themselves
-//                result.success(null)
-//            }
+            "initializeRecording" -> {
+                Log.i("AudioRecording", "initializeAudio")
+                Log.i("AudioRecording", call.argument("path") ?: "")
+                permissions.requestPermissions(
+                    activity,
+                    permissionsRegistry,
+                    object : HandlerPermissions.ResultCallback {
+                        override fun onResult(errorCode: String?, errorDescription: String?) {
+                            if (errorCode == null) {
+                                recordingMessenger = DartMessenger(messenger, "recording_event")
+                                audioRecording = AudioRecording(activity, recordingMessenger)
+                                audioRecording?.init(call.argument("path"))
+                                result.success(null)
+                            } else {
+                                result.error(errorCode, errorDescription, null)
+                            }
+                        }
+                    })
+            }
+            "startRecording" -> {
+                Log.i("AudioRecording", "startAudioRecording")
+                audioRecording?.start(result)
+            }
+            "pauseRecording" -> {
+                Log.i("AudioRecording", "pauseRecording")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    audioRecording?.pause(result)
+                }
+            }
+            "resumeRecording" -> {
+                Log.i("AudioRecording", "resumeRecording")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    audioRecording?.resume(result)
+                }
+            }
+            "stopRecording" -> {
+                Log.i("AudioRecording", "stopRecordingOrStreamingAudio")
+                audioRecording?.stop(result)
+            }
+            "disposeRecording" -> {
+                Log.i("AudioRecording", "disposeAudio")
+                // Native camera view handles the view lifecircle by themselves
+                result.success(null)
+            }
             else -> result.notImplemented()
         }
     }

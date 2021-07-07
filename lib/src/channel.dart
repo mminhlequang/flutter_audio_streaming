@@ -13,30 +13,6 @@ class RecordingChannel extends RecordingBaseChannel {
   }
 
   @override
-  getStatistics() async {
-    return _channel.invokeMapMethod<String, dynamic>('getStatistics');
-  }
-
-  @override
-  prepare(
-      {int? bitrate,
-      int? sampleRate,
-      bool? isStereo,
-      bool? echoCanceler,
-      bool? noiseSuppressor}) async {
-    return _channel.invokeMapMethod<String, dynamic>(
-      'prepare',
-      <String, dynamic>{
-        'bitrate': bitrate,
-        'sampleRate': sampleRate,
-        'isStereo': isStereo,
-        'echoCanceler': echoCanceler,
-        'noiseSuppressor': noiseSuppressor
-      },
-    );
-  }
-
-  @override
   start() async {
     return await _channel.invokeMapMethod<String, dynamic>('startRecording');
   }
@@ -156,7 +132,7 @@ abstract class StreamingBaseChannel extends _BaseChannel {
   dispose();
 }
 
-abstract class RecordingBaseChannel extends _BaseChannel {
+abstract class RecordingBaseChannel {
   initialize(String path);
 
   start();

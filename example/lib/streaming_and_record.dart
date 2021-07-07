@@ -1,24 +1,29 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_streaming/flutter_audio_streaming.dart';
+import 'package:path_provider/path_provider.dart';
 
-class StreamingExample extends StatefulWidget {
-  const StreamingExample({Key? key}) : super(key: key);
+class StreamingAndRecordExample extends StatefulWidget {
+  const StreamingAndRecordExample({Key? key}) : super(key: key);
 
   @override
-  _StreamingExampleState createState() => _StreamingExampleState();
+  _StreamingAndRecordExampleState createState() =>
+      _StreamingAndRecordExampleState();
 }
 
-class _StreamingExampleState extends State<StreamingExample>
+class _StreamingAndRecordExampleState extends State<StreamingAndRecordExample>
     with WidgetsBindingObserver {
-  StreamingController controller = StreamingController();
+  StreamingController streamingController = StreamingController();
+  RecordingController recordingController = RecordingController();
 
-  //rtmp://global-live.mux.com:5222/app/fe05b077-2faa-0058-8d81-3a8a3ff02876
-  //rtmp://live.bdata.link/LiveApp/732489839033615006342724
   TextEditingController _textFieldController = TextEditingController(
-      text: "rtmp://live.bdata.link/LiveApp/732489839033615006342724");
+      text:
+          "rtmp://voip.bdata.vn/LiveApp/7ri7u5yK2raV4hs4t50tL8fxzS021625623648");
+  late String _localPath;
   bool isVisible = true;
   Timer? _timer;
   int seconds = 0;
@@ -28,7 +33,7 @@ class _StreamingExampleState extends State<StreamingExample>
   String get textDateStream =>
       "${_min(hours)} : ${_min(minutes)} : ${_min(seconds)}";
 
-  bool get isStreaming => controller.value.isStreaming ?? false;
+  bool get isStreaming => streamingController.value.isStreaming ?? false;
 
   @override
   void initState() {
@@ -42,8 +47,8 @@ class _StreamingExampleState extends State<StreamingExample>
     _timer = null;
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
-    if (isStreaming) await controller.stop();
-    controller.dispose();
+    if (isStreaming) await streamingController.stop();
+    streamingController.dispose();
   }
 
   @override
@@ -68,15 +73,16 @@ class _StreamingExampleState extends State<StreamingExample>
   }
 
   void initialize() async {
-    controller.addListener(() async {
-      if (controller.value.hasError) {
-        showInSnackBar('Camera error ${controller.value.errorDescription}');
+    streamingController.addListener(() async {
+      if (streamingController.value.hasError) {
+        showInSnackBar(
+            'Camera error ${streamingController.value.errorDescription}');
         await stopStreaming();
       } else
         try {
-          if (controller.value.event == null) return;
+          if (streamingController.value.event == null) return;
           final Map<dynamic, dynamic> event =
-              controller.value.event as Map<dynamic, dynamic>;
+              streamingController.value.event as Map<dynamic, dynamic>;
           print('Event: $event');
           final String eventType = event['eventType'] as String;
           switch (eventType) {
@@ -91,23 +97,76 @@ class _StreamingExampleState extends State<StreamingExample>
               break;
           }
         } catch (e) {
-          print('initialize: $e');
+          print('initialize streaming: $e');
         }
     });
-    await controller.initialize();
-    controller.prepare();
+    await streamingController.initialize();
+    streamingController.prepare();
+
+    recordingController.addListener(() async {
+      if (streamingController.value.hasError) {
+        showInSnackBar(
+            'Camera error ${streamingController.value.errorDescription}');
+        await stopStreaming();
+      } else
+        try {
+          if (recordingController.value.event == null) return;
+          final Map<dynamic, dynamic> event =
+              recordingController.value.event as Map<dynamic, dynamic>;
+          print('Event recordingController: $event');
+          final String eventType = event['eventType'] as String;
+          switch (eventType) {
+            case StreamingController.ERROR:
+              break;
+            case StreamingController.RTMP_STOPPED:
+              break;
+            case StreamingController.RTMP_RETRY:
+              if (isVisible && isStreaming) {
+                await stopStreaming();
+              }
+              break;
+          }
+        } catch (e) {
+          print('initialize record: $e');
+        }
+    });
+    await _prepareSaveDir();
+    await recordingController.initialize(
+        pathFile(DateTime.now().millisecondsSinceEpoch.toString() + '.aac'));
+  }
+
+  String pathFile(String name) => _localPath + Platform.pathSeparator + name;
+
+  Future<void> _prepareSaveDir() async {
+    _localPath =
+        (await _findLocalPath())! + Platform.pathSeparator + 'RecordAudio';
+
+    final savedDir = Directory(_localPath);
+    bool hasExisted = await savedDir.exists();
+    if (!hasExisted) {
+      savedDir.create();
+    }
+  }
+
+  Future<String?> _findLocalPath() async {
+    final directory = Platform.isAndroid
+        ? await getExternalStorageDirectory()
+        : await getApplicationDocumentsDirectory();
+    return directory?.path;
   }
 
   Future<String> startStreaming() async {
-    if (!controller.value.isInitialized!) {
+    if (!streamingController.value.isInitialized!) {
       showInSnackBar('Error: is not Initialized.');
       return '';
     }
     if (isStreaming) return '';
     // Open up a dialog for the url
-    String url = await _getUrl();
+    String? url = await _getUrl();
+    if (url == null || url.isEmpty) return '';
     try {
-      await controller.start(url);
+      await streamingController.start(url);
+      await recordingController.start();
       hours = 0;
       minutes = 0;
       seconds = 0;
@@ -134,7 +193,7 @@ class _StreamingExampleState extends State<StreamingExample>
     return url;
   }
 
-  Future<String> _getUrl() async {
+  Future<String?> _getUrl() async {
     // Open up a dialog for the url
     String result = _textFieldController.text;
 
@@ -168,14 +227,20 @@ class _StreamingExampleState extends State<StreamingExample>
   }
 
   Future<void> stopStreaming() async {
-    if (!controller.value.isInitialized!) {
+    if (!streamingController.value.isInitialized!) {
       return;
     }
     if (!isStreaming) {
       return;
     }
     try {
-      await controller.stop();
+      await streamingController.stop();
+      final path = await recordingController.stop();
+      print('path: $path');
+      if (path != null && path.isNotEmpty) {
+        AudioPlayer audioPlayer = AudioPlayer();
+        await audioPlayer.play(path, isLocal: true);
+      }
       _timer?.cancel();
       _timer = null;
       setState(() {});
@@ -210,7 +275,7 @@ class _StreamingExampleState extends State<StreamingExample>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Audio streaming example'),
+        title: const Text('Audio streaming and record example'),
       ),
       body: Center(
         child: Column(
