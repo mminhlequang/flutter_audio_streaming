@@ -1,3 +1,6 @@
+## 1.0.2
+    - Record android
+
 ## 1.0.1
     - Upgrade depend android
 
