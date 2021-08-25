@@ -1,4 +1,4 @@
-## 1.0.3
+## 1.0.4
     - Update rate streaming android
 
 ## 1.0.2
