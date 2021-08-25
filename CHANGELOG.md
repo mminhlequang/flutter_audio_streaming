@@ -1,3 +1,6 @@
+## 1.0.3
+    - Update rate streaming android
+
 ## 1.0.2
     - Record android
 
