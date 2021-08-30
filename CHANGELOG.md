@@ -1,5 +1,5 @@
-## 1.0.4
-    - Update rate streaming android
+## 1.0.5
+    - Update setting android
 
 ## 1.0.2
     - Record android
