@@ -14,11 +14,21 @@ class AudioStreaming(
 
     private val rtmpAudio: RtmpOnlyAudio = RtmpOnlyAudio(this)
     private var prepared: Boolean = false
+    private var bitrate: Int? = null
+    private var sampleRate: Int? = null
+    private var isStereo: Boolean? = false
+    private var echoCanceler: Boolean? = false
+    private var noiseSuppressor: Boolean? = false
 
     fun prepare(
         bitrate: Int?, sampleRate: Int?, isStereo: Boolean?, echoCanceler: Boolean?,
         noiseSuppressor: Boolean?
     ): Boolean {
+        this.bitrate = bitrate
+        this.sampleRate = sampleRate
+        this.isStereo = isStereo
+        this.echoCanceler = echoCanceler
+        this.noiseSuppressor = noiseSuppressor
         prepared = true
         return rtmpAudio.prepareAudio(
             bitrate ?: (24 * 1024),
@@ -32,11 +42,11 @@ class AudioStreaming(
     private fun prepare(): Boolean {
         prepared = true
         return rtmpAudio.prepareAudio(
-            24 * 1024,
-            16000,
-            true,
-            false,
-            true
+            this.bitrate ?: (24 * 1024),
+            this.sampleRate ?: 16000,
+            this.isStereo ?: true,
+            this.echoCanceler ?: false,
+            this.noiseSuppressor ?: true
         )
     }
 
