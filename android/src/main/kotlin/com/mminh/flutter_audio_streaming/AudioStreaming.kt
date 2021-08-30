@@ -24,7 +24,7 @@ class AudioStreaming(
             bitrate ?: (24 * 1024),
             sampleRate ?: 16000,
             isStereo ?: true,
-            echoCanceler ?: true,
+            echoCanceler ?: false,
             (noiseSuppressor ?: true)
         )
     }
@@ -35,7 +35,7 @@ class AudioStreaming(
             24 * 1024,
             16000,
             true,
-            true,
+            false,
             true
         )
     }

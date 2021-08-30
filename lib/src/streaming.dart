@@ -35,16 +35,25 @@ class StreamingController extends ValueNotifier<AudioValue> {
     } on PlatformException catch (e) {
       throw AudioStreamingException(e.code, e.message);
     }
-    _eventSubscription = EventChannel(
-            'plugins.flutter.io/flutter_audio_streaming/streaming_event')
+    _eventSubscription = EventChannel('plugins.flutter.io/flutter_audio_streaming/streaming_event')
         .receiveBroadcastStream()
         .listen(_listener);
     _creatingCompleter!.complete();
     return _creatingCompleter!.future;
   }
 
-  Future<void> prepare() async {
-    await channel.prepare(noiseSuppressor: true);
+  Future<void> prepare(
+      {int? bitrate,
+      int? sampleRate,
+      bool? isStereo,
+      bool? echoCanceler,
+      bool? noiseSuppressor = true}) async {
+    await channel.prepare(
+        bitrate: bitrate,
+        sampleRate: sampleRate,
+        isStereo: isStereo,
+        echoCanceler: echoCanceler,
+        noiseSuppressor: noiseSuppressor);
   }
 
   /// Listen to events from the native plugins.
@@ -55,8 +64,7 @@ class StreamingController extends ValueNotifier<AudioValue> {
     }
     // Android: Event {eventType: rtmp_retry, errorDescription: BadName received}
     // iOS: Event {event: rtmp_retry, errorDescription: connection failed rtmpStatus}
-    final String eventType =
-        map['eventType'] as String? ?? map['event'] as String;
+    final String eventType = map['eventType'] as String? ?? map['event'] as String;
     final String errorDescription = map['errorDescription'];
     final Map<String, dynamic> uniEvent = <String, dynamic>{
       'eventType': eventType,
@@ -64,8 +72,7 @@ class StreamingController extends ValueNotifier<AudioValue> {
     };
     switch (eventType) {
       case 'error':
-        value =
-            value.copyWith(errorDescription: errorDescription, event: uniEvent);
+        value = value.copyWith(errorDescription: errorDescription, event: uniEvent);
         break;
       case 'rtmp_connected':
         value = value.copyWith(event: uniEvent);
