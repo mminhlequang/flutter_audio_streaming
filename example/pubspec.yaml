@@ -13,9 +13,7 @@ dependencies:
     path: ../
 
   cupertino_icons: ^1.0.3
-  wakelock: ^0.5.2
   path_provider: ^2.0.2
-  audioplayers: ^0.19.1
 
 dev_dependencies:
   flutter_test:

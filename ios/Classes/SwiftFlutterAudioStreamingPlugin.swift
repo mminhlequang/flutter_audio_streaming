@@ -26,6 +26,9 @@ public class SwiftFlutterAudioStreamingPlugin: NSObject, FlutterPlugin {
         result(nil)
     case "initializeStreaming":
         audioStreaming = AudioStreaming()
+        if let sink = SwiftFlutterAudioStreamingPlugin.eventSink {
+            audioStreaming?.setEventSink(sink)
+        }
         audioStreaming?.setup(result: result)
     case "startStreaming":
         // Makes sure arguments exists and is a Map
@@ -44,6 +47,12 @@ public class SwiftFlutterAudioStreamingPlugin: NSObject, FlutterPlugin {
         result(nil)
     case "disposeStreaming":
         audioStreaming?.dispose()
+        result(nil)
+    case "muteStreaming":
+        audioStreaming?.mute()
+        result(nil)
+    case "unMuteStreaming":
+        audioStreaming?.unmute()
         result(nil)
     default:
         result(nil)
@@ -68,7 +77,8 @@ class StreamHandlerEvent: NSObject, FlutterStreamHandler {
     
     func onCancel(withArguments arguments: Any?) -> FlutterError? {
         SwiftFlutterAudioStreamingPlugin.eventSink = nil
-        SwiftFlutterAudioStreamingPlugin.eventChannel?.setStreamHandler(nil)
+        //checking remioving it to fix MissingPluginException(No implementation found for method cancel on channel plugins.flutter.io/flutter_audio_streaming/streaming_event
+        //SwiftFlutterAudioStreamingPlugin.eventChannel?.setStreamHandler(nil)
         print("StreamHandlerEvent: onCancel")
         return nil
     }

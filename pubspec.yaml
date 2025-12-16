@@ -1,7 +1,7 @@
 name: flutter_audio_streaming
 description: A Flutter plugin for record or streaming audio by RTMP
 version: 1.0.5
-homepage: https://github.com/lqmminh/flutter_audio_streaming/tree/master
+homepage: https://github.com/resideo/flutter_audio_streaming
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
@@ -19,7 +19,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.mminh.flutter_audio_streaming
+        package: com.resideo.flutter_audio_streaming
         pluginClass: FlutterAudioStreamingPlugin
       ios:
         pluginClass: FlutterAudioStreamingPlugin

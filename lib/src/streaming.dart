@@ -9,10 +9,12 @@ import 'channel.dart';
 part 'streaming_value.dart';
 
 class StreamingController extends ValueNotifier<AudioValue> {
-  //ERROR, RTMP_STOPPED, RTMP_RETRY
+  //ERROR, RTMP_STOPPED, RTMP_RETRY, AUDIO_INTERRUPTED, AUDIO_RESUMED
   static const String ERROR = "error";
   static const String RTMP_STOPPED = "rtmp_stopped";
   static const String RTMP_RETRY = "rtmp_retry";
+  static const String AUDIO_INTERRUPTED = "audio_interrupted";
+  static const String AUDIO_RESUMED = "audio_resumed";
 
   StreamingController() : super(const AudioValue.uninitialized());
 
@@ -82,6 +84,12 @@ class StreamingController extends ValueNotifier<AudioValue> {
         break;
       case 'rtmp_stopped':
         value = value.copyWith(isStreaming: false, event: uniEvent);
+        break;
+      case 'audio_interrupted':
+        value = value.copyWith(event: uniEvent);
+        break;
+      case 'audio_resumed':
+        value = value.copyWith(event: uniEvent);
         break;
       default:
         value = value.copyWith(event: uniEvent);

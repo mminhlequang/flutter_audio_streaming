@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_streaming/flutter_audio_streaming.dart';
 import 'package:path_provider/path_provider.dart';
@@ -45,7 +44,7 @@ class _StreamingAndRecordExampleState extends State<StreamingAndRecordExample>
   void dispose() async {
     _timer?.cancel();
     _timer = null;
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
     if (isStreaming) await streamingController.stop();
     streamingController.dispose();
@@ -238,8 +237,9 @@ class _StreamingAndRecordExampleState extends State<StreamingAndRecordExample>
       final path = await recordingController.stop();
       print('path: $path');
       if (path != null && path.isNotEmpty) {
-        AudioPlayer audioPlayer = AudioPlayer();
-        await audioPlayer.play(path, isLocal: true);
+        //TODO: add ne wplayer here
+        //AudioPlayer audioPlayer = AudioPlayer();
+        //await audioPlayer.play(path, isLocal: true);
       }
       _timer?.cancel();
       _timer = null;

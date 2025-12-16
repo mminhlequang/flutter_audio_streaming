@@ -48,6 +48,15 @@ Change the minimum Android sdk version to 21 (or higher) in your `android/app/bu
 minSdkVersion 21
 ```
 
+Add the following permissions to your `android/app/src/main/AndroidManifest.xml`:
+
+```xml
+<uses-permission android:name="android.permission.RECORD_AUDIO"/>
+<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+```
+
+**Note**: The `READ_PHONE_STATE` permission is required for phone call detection. Without it, the plugin cannot detect active phone calls and prevent streaming conflicts.
+
 Need to add in a section to the packaging options to exclude a file, or gradle will error on building.
 
 ```

@@ -6,16 +6,14 @@ PODS:
   - HaishinKit (1.1.5):
     - Logboard (~> 2.2.1)
   - Logboard (2.2.2)
-  - path_provider (0.0.1):
+  - path_provider_foundation (0.0.1):
     - Flutter
-  - wakelock (0.0.1):
-    - Flutter
+    - FlutterMacOS
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_audio_streaming (from `.symlinks/plugins/flutter_audio_streaming/ios`)
-  - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - wakelock (from `.symlinks/plugins/wakelock/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
 
 SPEC REPOS:
   trunk:
@@ -27,19 +25,16 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_audio_streaming:
     :path: ".symlinks/plugins/flutter_audio_streaming/ios"
-  path_provider:
-    :path: ".symlinks/plugins/path_provider/ios"
-  wakelock:
-    :path: ".symlinks/plugins/wakelock/ios"
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
 
 SPEC CHECKSUMS:
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  flutter_audio_streaming: 28445209adc7f0d9a1e38e42117452161bce53cd
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  flutter_audio_streaming: 038a2a75f6c8cd18fbfa62465d9de6ca537afd27
   HaishinKit: 5cf385a823dee6b299404877edf418974422bf9f
   Logboard: 0ab6bbd984ed032b3f0b615cef06779a73445c80
-  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
+  path_provider_foundation: 2a68637f8a62df7f6e790a428d1bdf72cb4e2d59
 
 PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.16.2
